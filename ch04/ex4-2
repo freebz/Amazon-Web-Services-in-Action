@@ -1,0 +1,19 @@
+예제 4-2 의사 언어의 명령 흐름
+
+$DB = database create {"password": "***", "engine": "MySQL"}
+$BUCKET = bucket create {}
+
+await $DB
+$SERVER1 = server create {"cpu": 2, "ram": 4, "os": "ubuntu"}
+$SERVER2 = server create {"cpu": 2, "ram": 4, "os": "ubuntu"}
+
+await [$SERVER1, $SERVER2]
+$LB = loadbalancer create {"servers": [$_SERVER1, $_SERVER2]}
+
+await [$LB, $BUCKET]
+$CDN = cdn create {...}
+
+await $CDN
+$DNS = dns create {...}
+
+await $DNS

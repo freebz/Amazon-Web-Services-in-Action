@@ -1,0 +1,15 @@
+// 예제 4-6 CloudFormation 템플릿 구조
+
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "CloudFormation template structure",
+    "Parameters": {
+	[...]
+    },
+    "Resources": {
+	[...]
+    },
+    "Outputs": {
+	[...]
+    }
+}

@@ -1,0 +1,16 @@
+// 예제 4-8 CloudFormation 자원 구조
+
+{
+    [...]
+    "Resources": {
+	"NameOfResource": {
+	    "Type": "AWS::EC2::Instance",
+	    "Properties": {
+		[...]
+	    }
+	}
+    },
+    "Outputs": {
+	[...]
+    }
+}

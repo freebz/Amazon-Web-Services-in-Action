@@ -1,0 +1,18 @@
+// 예제 4-7 CloudFormation 매개변수 구조
+
+{
+    [...]
+    "Parameters": {
+	"NameOfParameter": {
+	    "Type": "Number",
+	    "Description": "This parameter is for demonstration"
+	    [...]
+	}
+    },
+    "Resources": {
+	[...]
+    },
+    "Outputs": {
+	[...]
+    }
+}

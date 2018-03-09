@@ -1,0 +1,15 @@
+// 예제 4-11 CloudFormation 출력 예제
+
+{
+    [...]
+    "Outputs": {
+	"ServerEC2ID": {
+	    "Value": {"Ref": "Server"},
+	    "Description": "EC2 ID of the server"
+	},
+	"PublicName": {
+	    "Value": {"Fn::GetAtt": ["Server", "PublicDnsName"]},
+	    "Description": "Public name of the server"
+	}
+    }
+}

@@ -1,0 +1,11 @@
+// 예제 4-10 CloudFormation 출력 구조
+
+{
+    [...]
+    "Outputs": {
+	"NameOfOutput": {
+	    "Value": "1",
+	    "Description": "This output is always 1"
+	}
+    }
+}

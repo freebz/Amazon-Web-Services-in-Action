@@ -1,0 +1,19 @@
+// 예제 4-9 CloudFormation EC2 서버 자원
+
+{
+    [...]
+    "Resources": {
+	"Server": {
+	    "Type": "AWS::EC2::Instance",
+	    "Properties": {
+		"ImageId": "ami-1ecae776",
+		"InstanceType": "t2.micro",
+		"KeyName": {"Ref": "KeyName"},
+		"SubnetId": {"Ref": "Subnet"}
+	    }
+	}
+    },
+    "Outputs": {
+	[...]
+    }
+}
