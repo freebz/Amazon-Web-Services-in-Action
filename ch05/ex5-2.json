@@ -1,0 +1,57 @@
+// 예제 5-2 사용자 데이터로 가상 서버를 구동하는 CloudFormation 템플릿의 일부
+
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Starts an virtual server (EC2) with OpenSwan [...]",
+    "Parameters": {
+	"KeyName": {
+	    "Description": "key for SSH access",
+	    "Type": "AWS::EC2::KeyPair::KeyName"
+	},
+	"VPC": {
+	    "Description": "Just select the one and onlly default VPC.",
+	    "Type": "AWS::EC2::VPC::Id"
+	},
+	"Subnet": {
+	    "Description": "Just select one of the available subnets",
+	    "Type": "AWS::EC2::Subnet::Id"
+	},
+	"IPSecSharedSecret": {
+	    "Description": "The shared secret key for IPSec.",
+	    "Type": "String"
+	},
+	"VPNUser": {
+	    "Description": "The VPN user.",
+	    "Type": "String"
+	},
+	"VPNPassword": {
+	    "Description": "The VPN password.",
+	    "Type": "String"
+	}
+    },
+    "Resources": {
+	"EC2Instance": {
+	    "Type": "AWS::EC2::Instance",
+	    "Properties": {
+		"InstanceType": "t2.micro",
+		"SecurityGroupIds": [{"Ref": "InstanceSecurityGroup"}],
+		"KeyName": {"Ref": "Subnet"},
+		"UserData":
+		  {"Fn::Base64": {"Fn::Join": ["", [
+		      "#!/bin/bash -ex\n",
+		      "export IPSEC_PSK=", {"Ref": "IPSecSharedSecret"}, "\n",
+		      "export VPN_USER=", {"Ref": "VPNUser"}, "\n",
+		      "export VPN_PASSWORD=", {"Ref": "VPNPassword"}, "\n",
+		      "export STACK_NAME=", {"Ref": "AWS::StackName"}, "\n",
+		      "export REGION=", {"Ref": "AWS::Region"}, "\n",
+		      "curl -s https://.../vpn-setup.sh | bash -ex\n"
+		  ]]}}
+	    },
+	    [...]
+	},
+	[...]
+    },
+    "Outputs": {
+	[...]
+    }
+}

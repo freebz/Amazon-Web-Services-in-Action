@@ -1,0 +1,26 @@
+// 예제 5-4 일래스틱 빈스토크 환경의 상태 기술서
+
+
+{
+    "Environments": [{
+	"Status": "Ready",
+	"SolutionStackName": "64bit Amazon Linux 2016.09 v3.3.1 running Node.js",
+	"EndpointURL": "34.206.249.195",
+	"DateUpdated": "2017-03-05T06:12:17.689Z",
+	"ApplicationName": "ehterpad",
+	"EnvironmentLinks": [],
+	"CNAME": "etherpad.sgrrsdwmv2.us-east-1.elasticbeanstalk.com",
+	"EnvironmentId": "e-pzxrsfhgry",
+	"Tier": {
+	    "Version": " ",
+	    "Type": "Standard",
+	    "Name": "WebServer"
+	},
+	"VersionLabel": "1.5.2",
+	"EnvironmentName": "etherpad",
+	"PlatformArn": "arn:aws:elasticbeanstalk:us-east-1::platform/Node.js running on 64bit Amazon Linux/3.3.1",
+	"AbortableOperationInProgress": false,
+	"DateCreated": "2017-03-05T06:07:03.631Z",
+	"Health": "Green"
+    }]
+}
