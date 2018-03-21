@@ -1,0 +1,21 @@
+// 예제 6-6 바스티언 호스트로부터의 SSH 접속을 허용하는 보안 그룹
+
+[...]
+"SecurityGroupPrivate": {
+    "Type": "AWS::EC2::SecurityGroup",
+    "Properties": {
+	"GroupDescription": "My security group",
+	"VpcId": {"Ref": "VPC"}
+    }
+},
+"AllowPrivateInboundSSH": {
+    "Type": "AWS::EC2::SecurityGroupIngress",
+    "Properties": {
+	"GroupId": {"Ref": "SecurityGroupPrivate"},
+	"IpProtocol": "tcp",
+	"FromPort": "22",
+	"ToPort": "22",
+	"SourceSecurityGroupId": {"Ref": "SecurityGroup"}
+    }
+},
+[...]

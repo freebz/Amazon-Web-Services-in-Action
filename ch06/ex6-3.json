@@ -1,0 +1,23 @@
+// 예제 6-3 ICMP를 허용하는 보안 그룹
+
+{
+    [...]
+    "Resources": {
+	"SecurityGroup": {
+	    [...]
+	},
+	"AllowInboundICMP": {
+	    "Type": "AWS::EC2::SecurityGroupIngress",
+	    "Properties": {
+		"GroupId": {"Ref": "SecurityGroup"},
+		"IpProtocol": "icmp",
+		"FromPort": "-1",
+		"ToPort": "-1",
+		"CidrIp": "0.0.0.0/0"
+	    }
+	},
+	"Server": {
+	    [...]
+	}
+    }
+}

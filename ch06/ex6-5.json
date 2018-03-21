@@ -1,0 +1,23 @@
+// 예제 6-5 특정 IP 주소에 대한 SSH를 허용하는 보안 그룹
+
+[...]
+"Parameters": {
+    [...]
+    "IpForSSH": {
+	"Description": "Your public IP address to allow SSH access",
+	"Type": "String"
+    }
+},
+"Resource": {
+    "AllowInboundSSH": {
+	"TYpe": "AWS::EC2::SecurityGroupIngress",
+	"Properties": {
+	    "GroupId": {"Ref": "SecurityGroup"},
+	    "IpProtocol": "tcp",
+	    "FromPort": "22",
+	    "ToPort": "22",
+	    "CidrIp": {"Fn::Join": ["", [{"Ref": "IpForSSH"}, "/32"]]}
+	}
+    },
+    [...]
+}

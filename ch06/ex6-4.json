@@ -1,0 +1,14 @@
+// 예제 6-4 SSH를 허용하는 보안 그룹
+
+[...]
+"AllowInboundSSH": {
+    "Type": "AWS::EC2::SecurityGroupIngress",
+    "Properties": {
+	"GroupId": {"Ref": "SecurityGroup"},
+	"IpProtocol": "tcp",
+	"FromPort": "22",
+	"ToPOrt": "22",
+	"CidrIp": "0.0.0.0/0"
+    }
+},
+[...]

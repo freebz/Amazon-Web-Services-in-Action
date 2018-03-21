@@ -1,0 +1,34 @@
+// 예제 6-2 단일 EC2 인스턴스와 연결된 빈 보안 그룹
+
+{
+    "Parameters": {
+	"KeyName": {
+	    "Type": "AWS::EC2::KeyPair::KeyName",
+	    "Default": "mykey"
+	},
+	"VPC": {
+	    [...]
+	},
+	"Subnet": {
+	    [...]
+	}
+    },
+    "Resources": {
+	"SecurityGroup": {
+	    "Type": "AWS::EC2::SecurityGroup",
+	    "Properties": {
+		"GroupDescription": "My security group",
+		"VpcId": {"Ref": "VPC"}
+	    }
+	},
+	"Server": {
+	    "Type": "AWS::EC2::Instance",
+	    "Properties": {
+		"ImageId": "t2.micro",
+		"KeyName": {"Ref": "KeyName"},
+		"SecurityGroupIds": [{"Ref": "SecurityGroup"}],
+		"SubnetId": {"Ref": "Subnet"}
+	    }
+	}
+    }
+}
