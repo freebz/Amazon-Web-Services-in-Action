@@ -1,0 +1,10 @@
+<!-- 예제 7-3 데이터를 HTML로 렌더링하는 템플릿 -->
+
+[...]
+<h2>Images</h2>
+{{#Objects}}
+  <p>
+    <img src="https://s3.amazonaws.com/{{Bucket}}/{{Key}}"/>
+  </p>
+{{/Objects}}
+[...]
