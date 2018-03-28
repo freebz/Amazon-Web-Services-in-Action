@@ -1,0 +1,49 @@
+// 예제 8-2 NFS용 보안 그룹
+
+"SecurityGroupClient": {
+    "Type": "AWS::EC2::SecurityGroup",
+    "Properties": {
+	"GroupDescription": "My client security group",
+	"VpcId": {"Ref": "VPC"}
+    }
+},
+"SecurityGroupServer": {
+    "Type": "AWS::EC2::SecurityGroup",
+    "Properties": {
+	"GroupDescription": "My server security group",
+	"VpcId": {"Ref": "VPC"},
+	"SecurityGroupIngress": [{
+	    "SourceSecurityGroupId": {"Ref": "SecurityGroupClient"},
+	    "IpProtocol": "tcp",
+	    "FromPOrt": 111,
+	    "ToPort": 111
+	}, {
+	    "SourceSecurityGroupId": {"Ref": "SecurityGroupClient"},
+	    "IpProtocol": "udp",
+	    "FromPort":
+	    "ToPort": 111
+	}, {
+	    "SourceSecurityGroupId": {"Ref": "SecurityGroupClient"},
+	    "IpProtocol": "tcp",
+	    "FromPort": 2049,
+	    "ToPort": 2049
+	}, {
+	    "SourceSecurityGroupId": {"Ref": "SecurityGroupClient"},
+	    "IpProtocol": "udp",
+	    "FromPort", 2049,
+	    "ToPort", 2049
+	}]
+    }
+},
+"SecurityGroupCommon": {
+    "Type": "AWS::EC2::SecurityGroup",
+    "Properties": {
+	"VpcId": {"Ref": "VPC"},
+	"SecurityGroupIngress": [{
+	    "CidrIp": "0.0.0.0/0",
+	    "FromPort": 22,public internet
+	    "IpProtocol": "tcp",
+	    "ToPort": 22
+	}]
+    }
+}

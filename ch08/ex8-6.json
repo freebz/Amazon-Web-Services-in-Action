@@ -1,0 +1,21 @@
+// 예제 8-6 NFC 클라이언트
+
+"Client1": {
+    "Type": "AWS::EC2::Instance",
+    "Properties": {
+	"ImageId": "ami-1ecae776",
+	"InstanceType": "t2.micro",
+	"KeyName": {"Ref": "KeyName"},
+	"SecurityGroupIds": [{"Ref": "SecurityGroupCommon"},
+			     {"Ref": "SecurityGroupClient"}],
+	"SubnetId": {"Ref": "Subnet"},
+	"UserData": {"Fn::Base64": {"Fn::Join": ["", [
+	    "#!/bin/bash -ex\n",
+	    "yum -y install nfs-utils nfs-utils-lib\n",
+	    "mkdir /mnt/nfs\n",
+	    "echo \"", {"Fn::GetAtt": ["Server", "PublicDnsName"]},
+	    ":/media/ephemeral0 /mnt/nfs nfs rw 0 0\" >> /etc/fstab\n",
+	    "mount -a\n"
+	]]}}
+    }
+}

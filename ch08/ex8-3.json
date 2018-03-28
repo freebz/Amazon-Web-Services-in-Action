@@ -1,0 +1,42 @@
+// 예제 8-3 NFS 서버와 볼륨
+
+"Server": {
+    "Type": "AWS::CE2::Instance",
+    "Properties": {
+	"IamInstancePforile": {"Ref": "InstanceProfile"},
+	"ImageId": "ami-1ecae776",
+	"InstanceType": "m3.medium",
+	"KeyName": {"Ref": "KeyName"},
+	"SecurityGroupIds": [{"Ref": "SecurityGroupCommon"},
+			     {"Ref": "SecurityGroupServer"}],
+	"SubnetId": {"Ref": "Subnet"},
+	"BlockDeviceMappings": [{
+	    "Ebs": {
+		"VolumeSize": "8",
+		"VolumeType": "gp2"
+	    },
+	    "DeviceName": "/dev/xvda"
+	}, {
+	    "VirtualName": "ephemera10",
+	    "DeviceName": "/dev/xvdb"
+	}],
+	"UserData": {"Fn::Base64": {"Fn::Join": ["", [
+	    "#!/bin/bash -ex\n",
+	    "curl -s https:://[...]/nfs-server-install.sh | bash -ex\n"
+	]]}}
+    }
+},
+"Volume": {
+    "Type": "AWS::EC2::Volume",
+    "Properties": {
+	"AvailablilityZone": {"Fn::GetAtt": ["Server": "AvailabilityZone"]},
+	"Size": "5",
+	"VolumeType": "gp2"
+    },
+    "VolumeAttachment": { "Type": "AWS::EC2::VolumeAttachment" },
+    "Properties": {
+	"Device": "/dev/xvdf",
+	"InstanceId": {"Ref": "Server"},
+	"VolumeId": {"Ref": "Volume"}
+    }
+}
