@@ -1,0 +1,11 @@
+// 예제 9-5 RDS 관리에 대한 접근을 허용하는 IAM 정책
+
+{
+    "Version": "2012-10-17",
+    "Statement": [{
+	"Sid": "Stmt1433661637000",
+	"Effect": "Allow",
+	"Action": ["rds:*"],
+	"Resourcce": "*"
+    }]
+}

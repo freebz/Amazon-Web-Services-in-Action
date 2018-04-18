@@ -1,0 +1,23 @@
+// 예제 9-6 CloudFormation 템플릿에서 발췌: RDS 데이터베이스에 대한 방화벽 규칙
+
+{
+    [...]
+    "Resources": {
+	[...]
+	"DatabaseSecurityGroup": {
+	    "Type": "AWS::EC2::SecurityGroup",
+	    "Properties": {
+		"GroupDescription": "awsinaction-db-sg",
+		"VpcId": {"Ref": "VPC"},
+		"SecurityGroupIngress": [{
+		    "IpProtocol": "tcp",
+		    "FromPort": "3306",
+		    "ToPOrt": "3306",
+		    "SourceSecurityGroupId": {"Ref": "WebServerSecurityGroup"}
+		}]
+	    }
+	},
+	[...]
+    },
+    [...]
+}

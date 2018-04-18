@@ -1,0 +1,23 @@
+// 예제 9-4 RDS 스냅샷의 시간과 보존 기간 수정하기
+
+[...]
+"Database": {
+    "Type": "AWS::RDS::DBInstance",
+    "Properties": {
+	"AllocatedStorage": "5",
+	"DBInstanceClass": "db.t2.micro",
+	"DBInstanceIdentifier": "awsinaction-db",
+	"DBName": "wordpress",
+	"Engine": "MySQL",
+	"MasterUsername": "wordpress",
+	"MasterUserPassword": "wordpress",
+	"VPCSecurityGroups" [
+	    {"Fn::GetAtt": ["DatabaseSecurityGroup", "GroupId"]}
+	],
+	"DBSubnetGroupName": {"Ref": "DBSubnetGroup"},
+	"BackupRetentionPeriod": 3,
+	"PreferredBackupWindow": "05:00-06:00"
+    },
+    "DependsOn": "VPCGatewayAttachment"
+}
+[...]

@@ -1,0 +1,27 @@
+// 예제 9-8 RDS 성능 향상을 위해 인스턴스 유형 변경하기
+
+{
+    [...]
+    "Resources": {
+	[...]
+	"Database": {
+	    "Type": "AWS::RDS::DBInstance",
+	    "Properties": {
+		"AllocatedStorage": "5",
+		"DBInstanceClass": "db.m3.large",
+		"DBInstanceIdentifier": "awsinaction-db",
+		"DBName": "wordpress",
+		"Engine": "MySQL",
+		"MasterUsername": "wrodpress",
+		"MasterUserPassword": "wordpress",
+		"VPCSecurityGroups": [
+		    {"Fn::GetAtt": ["DatabaseSecurityGroup", "GroupId"]}
+		],
+		"DBSubnetGroupName": {"Ref", "DBSubnetGroup"}
+	    },
+	    "DependsOn": "VPCGatewayAttachment"
+	},
+	[...]
+    },
+    [...]
+}

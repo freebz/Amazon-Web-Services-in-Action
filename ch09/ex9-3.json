@@ -1,0 +1,66 @@
+// 예제 9-3 MySQL RDS 인스턴스 설명
+
+{
+    "DBInstances": [{
+	"PubliclyAccessible": false,
+	"MasterUsername": "wordpress",
+	"LicenseModel": "general-public-license",
+	"VpcSecurityGroups": [{
+	    "Status": "active",
+	    "VpcSecurityGroupId": "sg-7a84aa1e"
+	}],
+	"InstanceCreateTime": "2015-05-16T06:40:33.107Z",
+	"OptionGroupMemberships": [{
+	    "Status": "in-sync",
+	    "OptionGroupName": "default:mysql-5-6"
+	}],
+	"PendingModifiedValues": {},
+	"Engine": "mysql",
+	"MultiAZ": false,
+	"LatestRestorableTime": "2015-05-16T08:00:00Z",
+	"DBSecurityGroups": [],
+	"DBParameterGroups": [{
+	    "DBParameterGroupName": "default.mysql5.6",
+	    "ParameterApplyStatus": "in-sync"
+	}],
+	"AutoMinorVersionUpgrade": true,
+	"PreferredBackupWindow": "06:01-06:31",
+	"DBSubnetGroup": {
+	    "Subnets": [{
+		"SubnetStatus": "Active",
+		"SubnetIdentifier": "subnet-f045c9db",
+		"SubnetAvailabilityZone": {
+		    "Name": "us-east-1a"
+		}
+	    }, {
+		"SubnetStatus": "Active",
+		"SubnetIdentifier": "subnet-42e4a235",
+		"SubnetAvailabilityZone": {
+		    "Name": "us-east-1b"
+		}
+	    }],
+	    "DBSubnetGroupName": "wordpress-dbsubnetgroup-1lbc2t9palsej",
+	    "VpcId": "vpc-941e29f1",
+	    "DBSubnetGroupDescription": "DB subnet group",
+	    "SubnetGroupStatus": "Complete"
+	},
+	"ReadReplicaDBInstanceIdentifiers": [],
+	"AllocatedStorage": 5,
+	"BackupRetentionPeriod": 1,
+	"DBName": "wordpress",
+	"PreferredMaintenanceWindow": "mon:06:49-mon:07:19",
+	"Endpoint": {
+	    "Port": 3306,
+	    "Address": "awsinaction-db.czwgnecjynmj.us-east-1.rds.amazonaws.com"
+	},
+	"DBInstanceStauts": "available",
+	"EngineVersion": "5.6.22",
+	"AvailabilityZone": "us-east-1b",
+	"StorageType": "standard",
+	"DbiResourceId": "db-SVHSQQO2RCPNR57LYLFXVHYOVU",
+	"CACertificateIdentifier": "rds-ca-2015",
+	"StorageEncrypted": false,
+	"DBInstanceClass": "db.t2.micro",
+	"DBInstanceIdentifier": "awsinaction-db"
+    }]
+}

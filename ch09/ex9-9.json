@@ -1,0 +1,28 @@
+// 예제 9-9 스토로지 유형을 변경하여 RDS 데이터베이스 성능 개선하기
+
+{
+    [...]
+    "Resources": {
+	[...]
+	"Database": {
+	    "Type": "AWS::RDS::DBInstance",
+	    "Properties": {
+		"AllocatedStorage": "5",
+		"DBInstanceClass": "db.t2.micro",
+		"DBInstanceIdentifier": "awsinaction-db",
+		"DBName": "wordpress",
+		"Engine": "MySQL",
+		"MasterUsername": "wrodpress",
+		"MasterUserPassword": "wordpress",
+		"VPCSecurityGroups": [
+		    {"Fn::GetAtt": ["DatabaseSecurityGroup", "GroupId"]}
+		],
+		"DBSubnetGroupName": {"Ref", "DBSubnetGroup"},
+		"StorageType": "gp2"
+	    },
+	    "DependsOn": "VPCGatewayAttachment"
+	},
+	[...]
+    },
+    [...]
+}
