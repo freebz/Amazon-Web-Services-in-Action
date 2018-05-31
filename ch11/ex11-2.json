@@ -1,0 +1,46 @@
+// 예제 11-2 복구 알람으로 젠킨스 CI 서버를 구동하는 EC2 인스턴스 시작하기
+
+[...]
+"ElasticIP": {
+    "Type": "AWS::EC2::EIP",
+    "DependsOn": "GatewayToInternet",
+    "Properties": {
+	"InstanceId": {"Ref": "Server"},
+	"Domain": "vpc"
+    },
+    "DependsOn": "GatewayToInternet"
+},
+"Server": {
+    "Type": "AWS::EC2::Instance",
+    "Properties": {
+	"InstanceType": "t2.micro",
+	"KeyName": {"Ref": "KeyName"},
+	"UserData": {"Fn::Base64": {"Fn::Join": ["", [
+	    "#!/bin/bash -ex\n",
+	    "wget http://pkg.jenkins-ci.org/redhat/jenkins-1.616-1.1.noarch.rpm\n",
+	    "rpm --install jenkins-1.616-1.noarch.rpm\n",
+	    [...]
+	    "service jenkins start\n"
+	]]}},
+	[...]
+    }
+},
+"RecoveryAlarm": {
+    "Type": "AWS::CloudWatch::Alarm",
+    "Properties": {
+	"AlarmDescription": "Recover server when underlying hardware fails.",
+	"Namespace": "AWS/EC2",
+	"MetricName": "StatusCheckFailed_System",
+	"Statistic": "Minimum",
+	"Period": "60",
+	"EvaluationPeriods": "5",
+	"ComparisonOperator": "GreaterThanThreshold",
+	"Threshold": "0",
+	"AlarmActions": [{
+	    "Fn::Join": ["", ["arn:aws:automate:", {"Ref": "AWS::Region" },
+			      ":ec2:recover" ]]
+	}],
+	"Dimensions": [{"Name": "InstanceId", "Value": {"Ref": "Server"}}]
+    }
+}
+[...]

@@ -1,0 +1,55 @@
+// 예제 11-4 젠킨스 CI 서버를 두 개의 가용 영역에 오토스케일링하기
+
+[...]
+"LaunchConfiguration": {
+    "Type": "AWS::AutoScaling::LaunchConfiguration",
+    "Properties": {
+	"InstanceMonitoring": false,
+	"ImageId": {"Fn::FindInMap": [
+	    "EC2RegionMap",
+	    {"Ref": "AWS::Region"},
+	    "AmazonLinuxAMIHVMEBSBacked64bit"
+	]},
+	"KeyName": {"Ref": "KeyName"},
+	"SecurityGroups": [{"Ref": "SecurityGroupJenkins"}],
+	"AssociatePublicIpAddress": true,
+	"InstanceType": "t2.micro",
+	"UserData": {
+	    "Fn::Base64": {
+		"Fn::Join": [
+		    "",
+		    [
+			"#!/bin/bash -ex\n",
+			"wget http://pkg.jenkins-ci.org/redhat/jenkins-1.616-1.1.noarch.rpm\n",
+			"rpm --install jenkins-1.616-1.1.noarch.rpm\n",
+			[...]
+			"Service jenkins start\n"
+		    ]
+		]
+	    }
+	}
+    }
+},
+"AutoScalingGroup": {
+    "Type": "AWS::AutoScaling::AutoScalingGroup",
+    "Properties": {
+	"LaunchConfigurationName": {"Ref": "LaunchConfiguration"},
+	"Tags": [
+	    {
+		"Key": "Name",
+		"Value": "jenkins",
+		"PropagateAtLaunch": true
+	    }
+	],
+	"DesiredCapacity": 1,
+	"MinSize": 1,
+	"MaxSize": 1,
+	"VPCZoneIdentifier": [
+	    {"Ref": "SubnetA"},
+	    {"Ref": "SubnetB"}
+	],
+	"HealthCheckType": "EC2"
+    },
+    "DependsOn": "GatewayToInternet"
+}
+[...]

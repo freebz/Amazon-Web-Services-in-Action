@@ -1,0 +1,83 @@
+// 예제 11-6 일래스틱 IP를 정작 엔드포인트로 사용하기
+
+[...]
+"IamRole": {
+    "Type": "AWS::IAM::Role",
+    "Properties": {
+	"AssumeRolePolicyDocument": {
+	    "Version": "2012-10-17",
+	    "Statement": [
+		{
+		    "Effect": "Allow",
+		    "Principal": {"Service": ["ec2.amazonaws.com"]},
+		    "Action": ["sta:AssumeRole"]
+		}
+	    ]
+	},
+	"Path": "/",
+	"Policies": [
+	    {
+		"PolicyName": "root",
+		"PolicyDocument": {
+		    "Version": "2012-10-17",
+		    "Statement": [
+			{
+			    "Action": ["ec2:AssociateAddress"],
+			    "Resource": ["*"],
+			    "Effect": "Allow"
+			}
+		    ]
+		}
+	    }
+	]
+    }
+},
+"IamInstanceProfile": {
+    "Type": "AWS::IAM::InstanceProfile",
+    "Properties": {
+	"Path": "/",
+	"Roles": [{"Ref": "IamROle"}]
+    }
+},
+"ElasticIP": {
+    "Type": "AWS::EC2::EIP",
+    "Properties": {
+	"Domain": "vpc"
+    },
+    "DependsOn": "GatewayToInternet"
+},
+"LaunchConfiguration": {
+    "Type": "AWS::AutoScaling::LaunchConfiguration",
+    "DependsOn": "ElasticIP",
+    "Properties": {
+	"InstaneMonitoring": false,
+	"IamInstanceProfile": {"Ref": "IsmInstanceProfile"},
+	"ImageId": {"Fn::FindInMap": [
+	    "EC2RegionMap",
+	    {"Ref": "AWS::Region"},
+	    "AmazonLinuxAMIHVMEBSBacked64bit"
+	]},
+	"KeyName": {"Ref": "KeyName"},
+	"SecurityGroups": [{"Ref": "SecuirtyGroupJenkins"}],
+	"AssociatePublicIpAddress": true,
+	"InstanceType": "t2.micro",
+	"UserData": {
+	    "Fn::Base64": {
+		"Fn::Join": [
+		    "",
+		    [
+			"#!/bin/bash -ex\n",
+			"aws configure set default.region ", {"Ref": "AWS::Region"},
+			"aws ec2 associate-address --instance-id",
+			"$INSTANCE_ID --allocation-id ",
+			{"Fn::GetAtt": ["ElasticIP", "AllocationId"]},
+			"\n",
+			"wget http://pkg.jenkins-ci.org/redhat/jenkins-1.616-1.1.noarch\n",
+			"rpm --install jenkins start\n"
+		    ]
+		]
+	    }
+	}
+    }
+}
+[...]

@@ -1,0 +1,22 @@
+// 예제 11-1 클라우드와치 알람을 생성하여 EC2 인스턴스의 건강상태 모니터링하기
+
+[...]
+"RecoveryAlarm": {
+    "Type": "AWS::CloudWatch::Alarm",
+    "Properties": {
+	"AlarmDescription": "Recover server when underlying hardware fails.",
+	"Namespace": "AWS/EC2",
+	"MetricName": "StatusCheckFailed_System",
+	"Statistic": "Minimum",
+	"Period": "60",
+	"EvaluationPeriods": "5",
+	"ComparisonOperator": "GreaterThanThreshold",
+	"Threshold": "0",
+	"AlarmActions": [{
+	    "Fn::Join": ["", ["arn:aws:automate:", {"Ref": "AWS::Region" },
+			      ":ec2:recover" ]]
+	}],
+	"Dimensions": [{"Name": "InstanceId", "Value": {"Ref": "Server"}}]
+    }
+}
+[...]
