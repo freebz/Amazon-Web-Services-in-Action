@@ -1,0 +1,31 @@
+// 예제 12-4 ELB로 SSL을 종료하여 암호화된 통신 제공하기
+
+"LoadBalancer": {
+    "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+    "Properties": {
+	"Subnets": [{"Ref": "SubnetA"}, {"Ref": "SubnetB"}],
+	"LoadBalancerName": "elb",
+	"Policies": [{
+	    "PolicyName": "ELBSecurityPolicyName",
+	    "PolicyType": "SSLNegotiationPolicyType",
+	    "Attributes": [{
+		"Name": "Reference-Security-Policy",
+		"Value": "ELBSecurityPolicy-2015-05"
+	    }]
+	}],
+	"Listeners": [{
+	    "InstancePort": "80",
+	    "InstanceProtocol": "HTTP",
+	    "LoadBalancerPort": "443",
+	    "Protocol": "HTTP",
+	    "SSLCertificateId": "my-ssl-cert",
+	    "PolicyNames": ["ELBSecurityPolicyName"]
+	}],
+	"HealthCheck": {
+	    [...]
+	},
+	"SecurityGroups": [{"Ref": "LoadBalancerSecurityGroup"}],
+	"Scheme": "internet-facing"
+    },
+    "DependsOn": "VPCGatewayAttachment"
+}

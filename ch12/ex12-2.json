@@ -1,0 +1,16 @@
+// 예제 12-2 서버가 요청에 응답할 수 있는지 확인하는 ELB 헬스 체크
+
+"LoadBalancer": {
+    "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+    "Properties": {
+	[...]
+	"HealthCheck": {
+	    "Target": "HTTP:80/index.html",
+	    "Interval": "10",
+	    "Timeout": "5",
+	    "HealthyThreshold": "3",
+	    "UnhealthyThreshold": "2"
+	}
+    },
+    "DependsOn": "VPCGatewayAttachment"
+}

@@ -1,0 +1,15 @@
+// 예제 12-6 ELB가 작성한 접근 로그 활성화하기
+
+"LoadBalancer": {
+    "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+    "Properties": {
+	[...]
+	"AccessLoggingPolicy": {
+	    "EmitInterval": 10,
+	    "Enabled": true,
+	    "S3BucketName": "elb-logging-bucket-$YourName",
+	    "S3BucketPrefix": "my-application/production"
+	}
+    },
+    "DependsOn": "VPCGatewayAttachment"
+}

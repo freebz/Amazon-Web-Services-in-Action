@@ -1,0 +1,49 @@
+// 예제 12-1 로드 밸런서를 생성하고 오토스케일링 그룹에 연결하기
+
+[...]
+"LoadBalancerSecurityGroup": {
+    "Type": "AWS::EC2::SecurityGroup",
+    "Properties": {
+	"GroupDescription": "elb-sg",
+	"VpcId": {"Ref": "VPC"},
+	"SecurityGroupIngress": [{
+	    "CidrIp": "0.0.0.0/0",
+	    "FromPort": 80,
+	    "ToPort": 80,
+	    "IpProtocol": "tcp"
+	}]
+    }
+},
+"LoadBalancer": {
+    "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+    "Properties": {
+	"Subnets": [{"Ref": "Subnet"}],
+	"LoadBalancerName": "elb",
+	"Listeners": [{
+	    "InstanceProtocol": "HTTP",
+	    "LoadBalancerPort": "80",
+	    "Protocol": "HTTP"
+	}],
+	"SecurityGroups": [{"Ref": "LoadBalancerSecurityGroup"}],
+	"Scheme": "internet-facinig"
+    },
+    "DependsOn": "VPCGatewayAttachment"
+},
+"LaunchConfiguration": {
+    "Type": "AWS::AutoScaling::LaunchConfiguration",
+    "Properties": {
+	[...]
+    }
+},
+"AutoScalingGroup": {
+    "Type": "AWS::AutoScaling::AutoScalingGroup",
+    "Properties": {
+	"LoadBalancerNames": [{"Ref": "LoadBalancer"}],
+	"LaunchConfigurationName": {"Ref": "LaunchConfiguration"},
+	"MinSize": "2",
+	"MaxSize": "2",
+	"DesiredCapacity": "2",
+	"VPCZoneIdentifier": [{"Ref": "Subnet"}]
+    },
+    "DependsOn": "VPCGatewayAttachment"
+}

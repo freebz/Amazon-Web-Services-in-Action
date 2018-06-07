@@ -1,0 +1,25 @@
+// 예제 12-3 ELB를 이용한 일반 TCP 트래픽(HTTP뿐만 아니라) 처리
+
+"LoadBalancer": {
+    "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+    "Properties": {
+	"Subnets": [{"Ref": "SubnetA"}, {"Ref": "SubnetB"}],
+	"LoadBalancerName": "elb",
+	"Listeners": [{
+	    "InstancePort": "3306",
+	    "InstanceProtocol": "TCP",
+	    "LoadBalancerPort": "3306",
+	    "Protocol": "TCP"
+	}],
+	"HealthCheck": {
+	    "Target": "TCP:3306",
+	    "Interval": "10",
+	    "Timeout": "5",
+	    "HealthThreshold": "3",
+	    "UnhealthyThreshold": "2"
+	},
+	"SecurityGroups": [{"Ref": "LoadBalancerSecurityGroup"}],
+	"Scheme": "internal"
+    },
+    "DependsOn": "VPCGatewayAttachment"
+}
