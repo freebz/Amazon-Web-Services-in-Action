@@ -1,0 +1,72 @@
+// 예제 13-9 Imagery CloudFormation 템플릿: 작업자용 일래스틱 빈스토크
+
+"EBWorkerApplication": {
+    "Type": "AWS::ElasticBeanstalk::Application",
+    "Properties": {
+	"ApplicationName": "imagery-worker",
+	"Description": "Imagery worker: AWS in Action: chapter 13"
+    }
+},
+"EBWorkerConfigurationTemplate": {
+    "Type": "AWS::ElasticBeanstalk::ConfigurationTemplate",
+    "Properties": {
+	"ApplicationName": {"Ref": "EBWorkerApplication"},
+	"Description": "Imagery worker: AWS in Action: chapter 13",
+	"SolutionStackName":
+	"64bit Amazon Linux 2015.03 v1.4.6 running Node.js",
+	"OptionSettings": [{
+	    "Namespace": "aws:autoscaling:launchconfiguration",
+	    "OptionName": "EC2KeyName",
+	    "Value": {"Ref": "KeyName"}
+	}, {
+	    "Namespace": "aws:autoscaling:launchconfiguration",
+	    "OptionName": "IamInstanceProfile",
+	    "Value": {"Ref": "WorkerInstanceProfile"}
+	}, {
+	    "Namespace": "aws:elasticbeanstalk:sqsd",
+	    "OptionName": "WorkerQueueURL",
+	    "Value": {"Ref": "SQSQueue"}
+	}, {
+	    "Namespace": "aws:elasticbeanstalk:sqsd",
+	    "OptionName": "HttpPath",
+	    "Value": "/sqs"
+	}, {
+	    "Namespace": "aws:elasticbeanstalk:container:nodejs",
+	    "OptionName": "NodeCommand",
+	    "Value": "node worker.js"
+	}, {
+	    "Namespace": "aws:elasticbeanstalk:application:environment",
+	    "OptionName": "ImageQueue",
+	    "Value": {"Ref": "SQSQueue"}
+	}, {
+	    "Namespace": "aws:elasticbeanstalk:application:environment",
+	    "OptionName": "ImageBucket",
+	    "Value": {"Ref": "Bucket"}
+	}]
+    }
+},
+"EBWorkerApplicationVersion": {
+    "Type": "AWS::ElasticBeanstalk::ApplicationVersion",
+    "Properties": {
+	"ApplicationName": {"Ref": "EBWorkerApplication"},
+	"Description": "Imagery worker: AWS in Action: chapter 13",
+	"SourceBundle": {
+	    "S3Bucket": "awsinaction",
+	    "S3Key": "chapter13/build/worker.zip"
+	}
+    }
+},
+"EBWorkerEnvironment": {
+    "Type": "AWS::ElasticBeanstalk::Environment",
+    "Properties": {
+	"ApplicationName": {"Ref": "EBWorkerApplication"},
+	"Description": "Imagery worker: AWS in Action: chapter 13",
+	"TemplateName": {"Ref": "EBWorkerConfigurationTemplate"},
+	"VersionLabel": {"Ref": "EBWorkerApplicationVersion"},
+	"Tier": {
+	    "Type": "SQS/HTTP",
+	    "Name": "Worker",
+	    "Version  ": "1.0"
+	}
+    }
+}

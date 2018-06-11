@@ -1,0 +1,67 @@
+// 예제 13-8 Imagery CloudFormation 템플릿: 서버용 일래스틱 빈스토크
+
+"DBServerApplication": {
+    "Type": "AWS::ElasticBeanstalk::Application",
+    "Properties": {
+	"ApplicationName": "imagery-server",
+	"Description": "Imagery server: AWS in Action: chapter 13"
+    }
+},
+"EBServerConfigurationTemplate": {
+    "Type": "AWS::ElasticBeanst::ConfigurationTemplate",
+    "Properties": {
+	"ApplicationName": {"Ref": "EBServerApplication"},
+	"Description": "Imagery server: AWS in Action: chapter 13",
+	"SolutionStackName":
+	"64bit Amazon Linux 2015.03 v1.4.6 running Node.js",
+	"OptionSettings": [{
+	    "Namespace": "aws:autoscaling:asg",
+	    "OptionName": "MinSize",
+	    "Value": "2"
+	}, {
+	    "Namespace": "aws:autoscaling:launchconfiguration",
+	    "OptionName": "EC2KeyName",
+	    "Value": {"Ref": "KeyName"}
+	}, {
+	    "Namespace": "aws:autoscaling:launchconfiguration",
+	    "OptionName": "IamInstanceProfile",
+	    "Value": {"Ref": "ServerInstanceProfile"}
+	}, {
+	    "Namespace": "aws:elasticbeanstalk:container:nodejs",
+	    "OptionName": "NodeCommand",
+	    "Value": "node server.js"
+	}, {
+	    "Namespace": "aws:elasticbeanstalk:application:environment"
+	    "OptionName": "ImageQueue",
+	    "Value" {"Ref": "SQSQueue"}
+	}, {
+	    "Namespace": "aws:elasticbeanstalk:application:environment",
+	    "OptionName": "ImageBucket",
+	    "Value": {"Ref": "Bucket"}
+	}, {
+	    "Namespace": "aws:elasticbeanstalk:container:nodejs:staticfiles",
+	    "OptionName": "/public",
+	    "Value": "/public"
+	}]
+    }
+},
+"EBServerApplicationVersion": {
+    "Type": "AWS::ElasticBeanstalk::ApplicationVersion",
+    "Properties": {
+	"ApplicationName": {"Ref": "EBServerApplication"},
+	"Description": "Imagery server: AWS in Action: chapter 13",
+	"SourceBundle": {
+	    "S3Bucket": "awsinaction",
+	    "S3Key": "chapter13/build/server.zip"
+	}
+    }
+},
+"EBServerEnvironment": {
+    "Type": "AWS::ElasticBeanstalk::Environment",
+    "Properties": {
+	"ApplicationName": {"Ref": "EBServerApplication"},
+	"Description": "Imagery server: AWS in Action: chapter 13",
+	"TemplateName": {"Ref": "EBServerConfigurationTemplate"},
+	"VersionLabel": {"Ref": "EBServerApplicationVersion"}
+    }
+}
