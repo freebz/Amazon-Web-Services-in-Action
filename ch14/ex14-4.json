@@ -1,0 +1,20 @@
+// 예제 14-4 오토스케일링 그룹의 CPU 부하를 기반으로 한 클라우드와치 알림
+
+"CPUHighAlram": {
+    "Type": "AWS::CloudWatch::Alarm",
+    "Properties": {
+	"EvaludationPeriods": "1",
+	"Statistic": "Average",
+	"Threshold": "80",
+	"AlarmDescription": "Alarm if CPU load is high.",
+	"Period": "60",
+	"AlarmActions": [{"Ref": "ScalingUpPolic"}],
+	"Namespace": "AWS/EC2",
+	"Dimensions": [{
+	    "Name": "AutoScalingGroupName",
+	    "Value": {"Ref": "AutoScalingGroup"}
+	}],
+	"ComparisonOperator": "GreaterThanThreshold",
+	"MetricName": "CPUUtilization"
+    }
+}

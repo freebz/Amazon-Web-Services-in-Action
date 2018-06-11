@@ -1,0 +1,33 @@
+// 예제 14-1 다중 EC2 인스턴스 웹 앱을 위한 오토스케일링
+
+[...]
+"LaunchConfiguration": {
+    "Type": "AWS::AutoScaling::LaunchConfiguration",
+    "Properties": {
+	"ImageId": "ami-b43503a9",
+	"InstanceType": "t2.micro",
+	"SecurityGroups": ["webapp"],
+	"KeyName": "mykey",
+	"AssociatePublicIpAddress": ture,
+	"UserData": {"Fn::Base64": {"Fn::Join": ["", [
+	    "#!/bin/bash -ex\n",
+	    "yum install httpd\n",
+	]]}}
+    }
+},
+"AutoScalingGroup": {
+    "Type": "AWS::AutoScaling::AutoScalingGroup",
+    "Properties": {
+	"LoadBalancerNames": [{"Ref": "LoadBalancer"}],
+	"LaunchConfigurationName": {"Ref": "LaunchConfiguration"},
+	"MinSize": "2",
+	"MaxSize": "4",
+	"DesiredCapacity": "2",
+	"Cooldown": "60",
+	"HealthCheckGracePeriod": "120",
+	"HealthCheckType": "ELB",
+	"VPCZoneIdentifier": ["subnet-a55fafcc", "subnet-fa224c5a"]
+    },
+    "DependsOn": "VPCGatewayAttachment"
+}
+[...]

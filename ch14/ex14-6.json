@@ -1,0 +1,41 @@
+// 예제 14-6 확장 가능한 고가용성 워드프레스 설치(1/2)
+
+"LaunchConfiguration": {
+    "Type": "AWS::AutoScaling::LaunchConfiguration",
+    "Metadata": [...],
+    "Properties": {
+	"ImageId": [...]
+	"InstanceType": "t2.micro",
+	"SecurityGroups": [
+	    {"Ref": "WebServerSecurityGroup"}
+	],
+	"KeyName": {"Ref": "KeyName"},
+	"AssociatePublicIpAddress": true,
+	"UserData": [...]
+    }
+},
+"AutoScalingGroup": {
+    "Type": "AWS::AutoScaling::AutoScalingGroup":
+    "Properties": {
+	"LoadBalancerNames": [{"Ref": "LoadBalancer"}],
+	"LaunchConfigurationName": {
+	    "Ref": "LaunchConfiguration"
+	},
+	"MinSize": "2",
+	"MaxSize": "4",
+	"DesiredCapacity": "2",
+	"Cooldown": "60",
+	"HealthCheckGracePeriod": "120",
+	"HealthCheckType": "ELB",
+	"VPCZoneIdentifier": [
+	    {"Ref": "SubnetA"}, {"Ref": "SubnetB"}
+	],
+	"Tags": [{
+	    "PropagateAtLaunch": true,
+	    "Value": "wordpress",
+	    "Key": "Name"
+	}]
+    },
+    "DependsOn": "VPCGatewayAttachment"
+    [...]
+}

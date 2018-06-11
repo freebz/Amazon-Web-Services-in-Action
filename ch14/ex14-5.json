@@ -1,0 +1,11 @@
+// 예제 14-5 서버 하나를 추가하는 스케일링 정책
+
+"ScalingUpPolicy": {
+    "Type": "AWS::AutoScaling::ScalingPolicy",
+    "Properties": {
+	"AdjustmentType": "ChangeInCapacity",
+	"AutoScalingGroupName": {"Ref": "AutoScalingGroup"},
+	"Cooldown": "60",
+	"ScalingAdjustment": "1"
+    }
+}

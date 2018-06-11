@@ -1,0 +1,37 @@
+// 예제 14-7 확장 가능한 고가용성 워드프레스 설치(2/2)
+
+"ScalingUpPolicy": {
+    "Type": "AWS::AutoScaling::ScalingPolicy",
+    "Properties": {
+	"AdjustmentType": "ChangeInCapacity",
+	"AutoScalingGroupName": {
+	    "Ref": "AutoScalingGroup"
+	},
+	"Cooldown": "60",
+	"SclaingAdjustment": "1"
+    }
+},
+"CPUHighAlram": {
+    "Type": "AWS::CloudWatch::Alarm",
+    "Properties": {
+	"EvaluationPeriods": "1",
+	"Statistic": "Average",
+	"Threshold": "60",
+	"AlarmDescription": "Alarm if CPU load is high.",
+	"Period": "60",
+	"AlarmActions": [{"Ref": "ScalingUpPolich"}],
+	"Namespace": "AWS/EC2",
+	"Dimensions": [{
+	    "Name": "AutoScalingGroupName",
+	    "Value": {"Ref": "AutoScalingGroup"}
+	}],
+	"ComparisonOperator": "GreaterThanThreshold",
+	"MetricName": "CPUUtilization"
+    }
+},
+"ScalingDownPolicy": {
+    [...]
+},
+"CPULowAlarm": {
+    [...]
+}

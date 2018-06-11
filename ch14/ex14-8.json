@@ -1,0 +1,23 @@
+// 예제 14-8 SQS 큐의 길이를 모니터링
+
+[...]
+"HighQueueAlarm": {
+    "Type": "AWS::CloudWatch::Alarm",
+    "Properties": {
+	"EvaluationPeriods": "1",
+	"Statistic": "Sum",
+	"Threshold": "5",
+	"AlarmDescription": "Alarm if queue length is higher than 5.",
+	"Period": "300",
+	"AlarmActions": [{"Ref": "ScalingUpPolicy"}],
+	"Namespace": "AWS/SQS",
+	"Dimensions": [{
+	    "Name": "QueueName",
+	    "Value" : {"Fn::GetAtt":
+		       ["SQSQueue", "QueueName"]}
+	}],
+	"ComparisonOperator": "GreaterThanThreshold",
+	"MetricName": "ApproximateNumberOfMessagesVisible"
+    }
+}
+[...]
